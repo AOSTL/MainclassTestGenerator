@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
-#include <windows.h>
 #include "MTGHelper.h"
 #include <filesystem>
+#include "WindowsConsolePrint.h"
 
 using namespace std;
 
@@ -12,48 +12,20 @@ void printHelp()
     puts(mtg::MTG_HELPER_INFO);
 }
 
-void prtRedChar(char c)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x04);
-    putchar (c);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
-}
-
-void prtRedChar(char *c)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x04);
-    printf ("%s",c);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
-}
-
-void prtYellowChar(char c)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x06);
-    putchar (c);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
-}
-
-void prtYellowChar(char *c)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x06);
-    printf ("%s",c);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);
-}
-
 void prtConvertInformation(char **argv)
 {
     puts("Starting to generate JUnit file from:");
-    prtYellowChar (argv[1]),puts("");
+    winConPrt::prtYellowChar (argv[1]),puts("");
     puts("MainClass Name is:");
-    prtYellowChar (argv[2]),puts("");
+    winConPrt::prtYellowChar (argv[2]),puts("");
     puts("Save the JUnit file in:");
-    prtYellowChar (argv[3]),puts("");
+    winConPrt::prtYellowChar (argv[3]),puts("");
 }
 
 void prtWarning(char *s)
 {
     putchar ('[');
-    prtYellowChar('W');
+    winConPrt::prtYellowChar('W');
     putchar (']');
     printf (" %s\n",s);
 }
@@ -61,7 +33,7 @@ void prtWarning(char *s)
 void prtWarning(char *prtf, char *s)
 {
     putchar ('[');
-    prtYellowChar('W');
+    winConPrt::prtYellowChar('W');
     putchar (']');
     putchar (' ');
     printf (prtf, s);
@@ -70,7 +42,7 @@ void prtWarning(char *prtf, char *s)
 void prtError(char *s)
 {
     putchar ('[');
-    prtRedChar('E');
+    winConPrt::prtRedChar('E');
     putchar (']');
     printf (" %s\n",s);
 }
@@ -78,7 +50,7 @@ void prtError(char *s)
 void prtError(char *prtf, char *s)
 {
     putchar ('[');
-    prtRedChar('E');
+    winConPrt::prtRedChar('E');
     putchar (']');
     putchar (' ');
     printf (prtf, s);
