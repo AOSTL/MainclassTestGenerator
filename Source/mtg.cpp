@@ -1,8 +1,9 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
-#include "MTGHelper.h"
 #include <filesystem>
+#include "MTGHelper.h"
+#include "MTGPrintNotice.h"
 #include "WindowsConsolePrint.h"
 
 using namespace std;
@@ -22,51 +23,6 @@ void prtConvertInformation(char **argv)
     winConPrt::prtYellowChar (argv[3]),puts("");
 }
 
-void prtWarning(char *s)
-{
-    putchar ('[');
-    winConPrt::prtYellowChar('W');
-    putchar (']');
-    printf (" %s\n",s);
-}
-
-void prtWarning(char *prtf, char *s)
-{
-    putchar ('[');
-    winConPrt::prtYellowChar('W');
-    putchar (']');
-    putchar (' ');
-    printf (prtf, s);
-}
-
-void prtError(char *s)
-{
-    putchar ('[');
-    winConPrt::prtRedChar('E');
-    putchar (']');
-    printf (" %s\n",s);
-}
-
-void prtError(char *prtf, char *s)
-{
-    putchar ('[');
-    winConPrt::prtRedChar('E');
-    putchar (']');
-    putchar (' ');
-    printf (prtf, s);
-}
-
-void prtInformation(char *s)
-{
-    printf ("[I] %s\n",s);
-}
-
-void prtInformation(char *prtf, char *s)
-{
-    printf ("[I] ");
-    printf (prtf, s);
-}
-
 bool tryContinue()
 {
     while (1)
@@ -79,12 +35,12 @@ bool tryContinue()
             return true;
         else if (choice == 'n' || choice == 'N')
         {
-            prtError((char *)"Generation interrupted. We have done nothing.");
+            mtg::prtError((char *)"Generation interrupted. We have done nothing.");
             // puts("Press any key to continue.");
             // getchar();
             return false;
         }
-        prtWarning((char *)"Illegal Input!");
+        mtg::prtWarning((char *)"Illegal Input!");
     }
 }
 
@@ -94,7 +50,7 @@ bool checkPath(char **argv)
     FILE *target = fopen (argv[3], "r");
     if (source==NULL)
     {
-        prtError((char *)"Fail to open: File \"%s\" does not exist. We have done nothing.\n", argv[1]);
+        mtg::prtError((char *)"Fail to open: File \"%s\" does not exist. We have done nothing.\n", argv[1]);
         return false;
     }
     if (target!=NULL)
@@ -103,15 +59,15 @@ bool checkPath(char **argv)
         filesystem::path p2 = argv[3];
         if (filesystem::equivalent(p1, p2))
         {
-            prtError((char *)"Input file is the same as output file. We have done nothing.");
+            mtg::prtError((char *)"Input file is the same as output file. We have done nothing.");
             return false;
         }
-        prtWarning((char *)"File \"%s\" has already exists. ", argv[3]);
+        mtg::prtWarning((char *)"File \"%s\" has already exists. ", argv[3]);
         if (!tryContinue())
             return false;
     }
     fclose (source),fclose (target);
-    prtInformation ((char *)"Now generating.");
+    mtg::prtInformation ((char *)"Now generating.");
     return true;
 }
 
@@ -137,7 +93,7 @@ void convert(char **argv)
         fprintf (target, "\";\n");
     fprintf (target, mtg::MTG_JUNIT_TAIL, argv[2],argv[2],argv[2]);
     fclose (source),fclose (target);
-    prtInformation ((char *)"Generation completed.");
+    mtg::prtInformation ((char *)"Generation completed.");
 }
 
 int argChecker(int argc, char **argv)
@@ -160,7 +116,7 @@ int argChecker(int argc, char **argv)
     }
     else if (argc>4)
     {
-        prtError((char *)"Command format error! Use \"mtg\" to get help.");
+        mtg::prtError((char *)"Command format error! Use \"mtg\" to get help.");
         return false;
     }
     return true;
