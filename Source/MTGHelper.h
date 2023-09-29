@@ -3,9 +3,10 @@
 
 namespace mtg{
     const char MTG_HELPER_INFO[] = "\
-mtg(Mainclass Test Generator) 1.0\n\
+mtg(MainclassTestGenerator) 1.1\n\
+For more information, view https://github.com/AOSTL/MainclassTestGenerator\n\
 Usage:\n\
-mtg <Input Source Path> <MainClass Name> <Output Target Path>\n\
+mtg <Input Source Path> <MainClass Name> <Output Target Path> [-Options]\n\
 For example: mtg MainClassInput.in MainClass MainClassTest.java\n\
 Or: mtg D:\\java\\MainClassInput.in MainClass C:\\MainClassTest.java \n\
 You can also omit <Output Target Path>, then it will be set as <mtg path>/<MainClass Name>Test.java\n\
@@ -30,6 +31,11 @@ public class %s {\n\
     }\n\
 }\n\
 ";
+    bool printHelp()
+    {
+        puts(mtg::MTG_HELPER_INFO);
+        return false;
+    }
 }
 
 #endif

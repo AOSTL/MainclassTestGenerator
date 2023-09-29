@@ -54,4 +54,25 @@ namespace mtg
         printf ("[I] ");
         printf (prtf, s);
     }
+
+    bool tryContinue(bool *tags)
+    {
+        while (true)
+        {
+            printf ("Do you want to continue? (y/n): ");
+            if (tags[24])
+                return !puts("");
+            char choice;
+            choice = getchar();
+            getchar();
+            if (choice == 'y' || choice == 'Y')
+                return true;
+            else if (choice == 'n' || choice == 'N')
+            {
+                mtg::prtError((char *)"Generation interrupted. We have done nothing.");
+                return false;
+            }
+            mtg::prtWarning((char *)"Illegal Input!");
+        }
+    }
 }
