@@ -6,11 +6,10 @@ namespace mtg{
 mtg(MainclassTestGenerator) 1.1\n\
 For more information, view https://github.com/AOSTL/MainclassTestGenerator\n\
 Usage:\n\
-mtg <Input Source Path> <MainClass Name> <Output Target Path> [-Options]\n\
-For example: mtg MainClassInput.in MainClass MainClassTest.java\n\
-Or: mtg D:\\java\\MainClassInput.in MainClass C:\\MainClassTest.java \n\
-You can also omit <Output Target Path>, then it will be set as <mtg path>/<MainClass Name>Test.java\n\
-For example, use \"mtg MainClassInput.in MainClass\" and put mtg in \"D:\\java\", then the target will be saved as \"D:\\MainClassTest.java\"\
+mtg <InputSourcePath> <MainClassName> <OutputTargetPath> [-Options]\n\
+Options:\n\
+-h : Get help information from mtg. Only and always available when it is the first argument and all later arguments will be dismissed.\n\
+-y : Always assume \"y\" for all queries.\
 ";
     const char MTG_JUNIT_HEAD[] = "\
 package test;\n\

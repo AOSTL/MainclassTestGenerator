@@ -11,9 +11,9 @@ void convert(std::string* filePath)
     while (~(c=fgetc(source)))
     {
         if (c_pre=='\n')
-            fprintf (target, " +\n                    \"");
+            fprintf (target, " +\n                   \"");
         if (c=='\n')
-            fputc('\"',target);
+            fputc('\\',target),fputc('n',target),fputc('\"',target);
         else
             fputc (c, target);
         c_pre=c;

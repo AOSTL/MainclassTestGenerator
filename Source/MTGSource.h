@@ -1,8 +1,8 @@
 #ifndef MTGSOURCE
 #define MTGSOURCE
 
-#include "MTGHelper.h"
-#include "MTGPrintNotice.h"
-#include "MTGArgChecker.h"
+#include "./MTGHead/MTGHelper.h"
+#include "./MTGHead/MTGPrintNotice.h"
+#include "./MTGHead/MTGArgChecker.h"
 
 #endif
