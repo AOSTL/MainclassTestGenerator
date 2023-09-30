@@ -6,16 +6,25 @@ namespace mtg{
 mtg(MainclassTestGenerator) 1.1\n\
 For more information, view https://github.com/AOSTL/MainclassTestGenerator\n\
 Usage:\n\
-mtg <InputSourcePath> <MainClassName> <OutputTargetPath> [-Options]\n\
+mtg <InputSourcePath> <MainClassName> <OutputPath> [-Options]\n\
 Options:\n\
--h : Get help information from mtg. Only and always available when it is the first argument and all later arguments will be dismissed.\n\
--y : Always assume \"y\" for all queries.\
+-e \n\
+    Show errors only.\n\
+-h\n\
+    Get help information from mtg. Only available when it is the first argument and later arguments will be dismissed.\n\
+-p <PackageName>\n\
+    Appoint the package name for JUnit file. No package statement will be added to the file if followed by no legal package name.\n\
+-s \n\
+    Print the result to console instead of file. If so, your output path will be dismissed.\n\
+-y\n\
+    Assume \"y\" for all queries.\
 ";
     const char MTG_JUNIT_HEAD[] = "\
 package test;\n\
 \n\
 import java.io.ByteArrayInputStream;\n\
 import java.io.InputStream;\n\
+import org.junit.test;\n\
 \n\
 public class %s {\n\
     @Test\n\
@@ -27,6 +36,7 @@ public class %s {\n\
         System.setIn(new ByteArrayInputStream(s.getBytes()));\n\
         %s test = new %s();\n\
         %s.main(null);\n\
+        System.setIn(originalIn);\n\
     }\n\
 }\n\
 ";

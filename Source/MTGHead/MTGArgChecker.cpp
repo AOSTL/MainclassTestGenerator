@@ -59,9 +59,11 @@ namespace mtg
         if (std::regex_search(filePath[2],reg))
             filePath[3]=filePath[2],filePath[2].clear();
         if (filePath[2].empty())
-            filePath[2]="MainClass";
+            filePath[2]="MainClassTest";
+        else
+            filePath[2]+="Test";
         if (filePath[3].empty())
-            filePath[3]=filePath[2]+"Test.java";
+            filePath[3]=filePath[2]+".java";
         return true;
     FORMATERR:
         mtg::prtError((char *)"Command format error. See \"mtg -h\" to get help.");
@@ -75,7 +77,7 @@ namespace mtg
         pSource = std::filesystem::absolute(pSource);
         filePath[1]=pSource.string();
         winConPrt::prtYellowChar (filePath[1].data()),puts("");
-        puts("MainClass Name is:");
+        puts("TestClass name is:");
         winConPrt::prtYellowChar (filePath[2].data()),puts("");
         std::filesystem::path pTarget = filePath[3];
         if (std::filesystem::relative(pTarget)==pTarget)
