@@ -3,22 +3,18 @@
 #include "MTGPrintNotice.h"
 #include <filesystem>
 #include <regex>
+#include "MTGData.h"
 
 namespace mtg
 {
-    int argChecker(int argc, char **argv, bool *tag, std::string *filePath)
+    int argChecker(int argc, char **argv)
     {
         //                          a b c d e f g h i j k l m n o p q r s t u v w x y z
-        const bool availableTags[]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0};
+        const bool availableTags[]={0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0};
         int argcArgv=0;
         const int MAX_FILE_PATH=3;
         std::regex reg ("[.\\\\]");
         argc--;
-        if (argc>4)
-        {
-            mtg::prtError((char *)"Too much arguments for mtg.");
-            goto FORMATERR;
-        }
         if (argc==0)
         {
             mtg::prtError((char *)"Too few arguments for mtg.");
@@ -26,6 +22,8 @@ namespace mtg
         }
         if (strcmp(argv[1],(char *)"-h")==0)
             return mtg::printHelp();
+        else if (argv[1][0]=='-')
+            goto FORMATERR;
         for (int i=1;i<=argc;i++,argcArgv++)
             if (argv[i][0]=='-')
                 break;
@@ -51,61 +49,59 @@ namespace mtg
                 goto FORMATERR;
             }
             else
-                tag[(argv[i][1]|0b100000)-'a']=true;
+                mtg::tags[(argv[i][1]|0b100000)-'a']=true;
         }
         // deal with filePath
         for (int i=1;i<=argcArgv;i++)
-            filePath[i]=argv[i];
-        if (std::regex_search(filePath[2],reg))
-            filePath[3]=filePath[2],filePath[2].clear();
-        if (filePath[2].empty())
-            filePath[2]="MainClassTest";
-        else
-            filePath[2]+="Test";
-        if (filePath[3].empty())
-            filePath[3]=filePath[2]+".java";
+            mtg::filePath[i]=argv[i];
+        if (std::regex_search(mtg::filePath[2],reg))
+            mtg::filePath[3]=mtg::filePath[2],mtg::filePath[2].clear();
+        if (mtg::filePath[2].empty())
+            mtg::filePath[2]="MainClass";
+        if (mtg::filePath[3].empty())
+            mtg::filePath[3]=mtg::filePath[2]+"Test.java";
         return true;
     FORMATERR:
         mtg::prtError((char *)"Command format error. See \"mtg -h\" to get help.");
         return false;
     }
 
-    void prtConvertInformation(std::string* filePath)
+    void prtConvertInformation()
     {
         puts("Starting to generate JUnit file from:");
-        std::filesystem::path pSource = filePath[1];
+        std::filesystem::path pSource = mtg::filePath[1];
         pSource = std::filesystem::absolute(pSource);
-        filePath[1]=pSource.string();
-        winConPrt::prtYellowChar (filePath[1].data()),puts("");
-        puts("TestClass name is:");
-        winConPrt::prtYellowChar (filePath[2].data()),puts("");
-        std::filesystem::path pTarget = filePath[3];
+        mtg::filePath[1]=pSource.string();
+        winConPrt::prtYellowChar (mtg::filePath[1].data()),puts("");
+        puts("Class name is:");
+        winConPrt::prtYellowChar (mtg::filePath[2].data()),puts("");
+        std::filesystem::path pTarget = mtg::filePath[3];
         if (std::filesystem::relative(pTarget)==pTarget)
             pTarget=pSource.parent_path()/pTarget;
         pTarget = std::filesystem::absolute(pTarget);
-        filePath[3]=pTarget.string();
+        mtg::filePath[3]=pTarget.string();
         puts("Save the JUnit file as:");
-        winConPrt::prtYellowChar (filePath[3].data()),puts("");
+        winConPrt::prtYellowChar (mtg::filePath[3].data()),puts("");
     }
 
-    bool checkPath(std::string* filePath, bool *tags)
+    bool checkPath()
     {
-        std::filesystem::path pSource = filePath[1];
-        std::filesystem::path pTarget = filePath[3];
+        std::filesystem::path pSource = mtg::filePath[1];
+        std::filesystem::path pTarget = mtg::filePath[3];
         std::regex reg ("[A-Z]:[^?|*\"<>:]+");
-        if (!std::regex_match(filePath[1],reg))
+        if (!std::regex_match(mtg::filePath[1],reg))
         {
-            mtg::prtError((char *)"Fail to load: Path \"%s\" is illegal. We have done nothing.",filePath[1].data());
+            mtg::prtError((char *)"Fail to load: Path \"%s\" is illegal. We have done nothing.",mtg::filePath[1].data());
             return false;
         }
-        if (!std::regex_match(filePath[3],reg))
+        if (!std::regex_match(mtg::filePath[3],reg))
         {
-            mtg::prtError((char *)"Fail to load: Path \"%s\" is illegal. We have done nothing.",filePath[3].data());
+            mtg::prtError((char *)"Fail to load: Path \"%s\" is illegal. We have done nothing.",mtg::filePath[3].data());
             return false;
         }
         if (!std::filesystem::exists (pSource))
         {
-            mtg::prtError((char *)"Fail to load: File \"%s\" does not exist. We have done nothing.\n", filePath[1].data());
+            mtg::prtError((char *)"Fail to load: File \"%s\" does not exist. We have done nothing.\n", mtg::filePath[1].data());
             return false;
         }
         if (std::filesystem::exists(pTarget))
@@ -115,8 +111,8 @@ namespace mtg
                 mtg::prtError((char *)"Input file is the same as output file. We have done nothing.");
                 return false;
             }
-            mtg::prtWarning((char *)"File \"%s\" has already exists. ", filePath[3].data());
-            if (!mtg::tryContinue(tags))
+            mtg::prtWarning((char *)"File \"%s\" has already exists. ", mtg::filePath[3].data());
+            if (!mtg::tryContinue())
                 return false;
         }
         mtg::prtInformation ((char *)"Generating.");

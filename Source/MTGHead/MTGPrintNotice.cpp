@@ -1,8 +1,9 @@
+#include <cstdio>
+#include "WindowsConsolePrint.h"
+#include "MTGData.h"
+
 namespace mtg
 {
-    #include <cstdio>
-    #include "WindowsConsolePrint.h"
-
     void prtWarning(char *s);
     void prtWarning(char *prtf, char *s);
     void prtError(char *s);
@@ -12,6 +13,8 @@ namespace mtg
 
     void prtWarning(char *s)
     {
+        if (mtg::tags[4])
+            return;
         putchar ('[');
         winConPrt::prtYellowChar('W');
         putchar (']');
@@ -20,6 +23,8 @@ namespace mtg
 
     void prtWarning(char *prtf, char *s)
     {
+        if (mtg::tags[4])
+            return;
         putchar ('[');
         winConPrt::prtYellowChar('W');
         putchar (']');
@@ -46,16 +51,20 @@ namespace mtg
 
     void prtInformation(char *s)
     {
+        if (mtg::tags[4])
+            return;
         printf ("[I] %s\n",s);
     }
 
     void prtInformation(char *prtf, char *s)
     {
+        if (mtg::tags[4])
+            return;
         printf ("[I] ");
         printf (prtf, s);
     }
 
-    bool tryContinue(bool *tags)
+    bool tryContinue()
     {
         while (true)
         {
