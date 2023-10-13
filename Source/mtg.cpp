@@ -14,8 +14,11 @@ void convert(std::string* filePath)
             res+=" +\n                   \"";
         if (c=='\n')
             res+="\\n\"";
-        else
-            res+=c;
+        else if (c=='\\')
+            res+="\\\\";
+        else if (c=='%')
+            res+="%%%%";
+        else res+=c;
         c_pre=c;
     }
     if (c_pre=='\n')
